@@ -6,21 +6,21 @@ namespace GradeBook.GradeBooks
 {
     public class RankedGradeBook : BaseGradeBook
     {
-        public RankedGradeBook(string name): base(name)
+        public RankedGradeBook(string name) : base(name)
         {
-            Type = GradeBookType.Ranked;    
+            Type = GradeBookType.Ranked;
         }
         public override char GetLetterGrade(double averageGrade)
         {
-            if(Students.Count < 5)
+            if (Students.Count < 5)
             {
                 throw new InvalidOperationException();
             }
 
             var grades = Students.Select(x => x.AverageGrade).ToList();
             grades = grades.OrderByDescending(x => x).ToList();
-          
-            for(int i = 0; i < grades.Count; i++)
+
+            for (int i = 0; i < grades.Count; i++)
             {
                 if (grades[i] <= averageGrade)
                 {
@@ -36,6 +36,15 @@ namespace GradeBook.GradeBooks
 
             }
             return 'F';
+        }
+        public override void CalculateStatistics()
+        {
+            if (Students.Count < 5)
+            {
+                Console.WriteLine("Ranked grading required at least 5 students.");
+                return;
+            }
+            base.CalculateStatistics();
         }
     }
 }
