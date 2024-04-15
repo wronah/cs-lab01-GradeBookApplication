@@ -19,23 +19,32 @@ namespace GradeBook.GradeBooks
 
             var grades = Students.Select(x => x.AverageGrade).ToList();
             grades = grades.OrderByDescending(x => x).ToList();
+            var top20Percent = grades.Count / 5;
+            var letterGrade = 5;
+            var scoredHigher = 0;
 
             for (int i = 0; i < grades.Count; i++)
             {
                 if (grades[i] <= averageGrade)
                 {
-                    return i switch
-                    {
-                        0 => 'A',
-                        1 => 'B',
-                        2 => 'C',
-                        3 => 'D',
-                        _ => 'F'
-                    };
+                    break;
                 }
 
+                scoredHigher++;
+                if(scoredHigher >= top20Percent)
+                {
+                    scoredHigher -= top20Percent;
+                    letterGrade--;
+                }
             }
-            return 'F';
+            return letterGrade switch
+            {
+                5 => 'A',
+                4 => 'B',
+                3 => 'C',
+                2 => 'D',
+                _ => 'F'
+            };
         }
         public override void CalculateStatistics()
         {
